@@ -7,9 +7,8 @@ ALPHA = 0.4
 
 def build_ngrams(corpus, n):
     """
-    Builds frequency distributions for n-grams up to the specified size.
-    Returns a dictionary of Counters for each n.
-    ngrams[k][context] = Counter of next words
+    Constructs n-gram frequency models up to max_n.
+    Returns a nested dictionary: ngram_models[n][context] = Counter of next words.
     """
     ngrams = defaultdict(lambda: defaultdict(Counter))
     
