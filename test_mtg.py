@@ -11,6 +11,9 @@ import nltk
 
 from mtg import finish_sentence
 
+nltk.download("gutenberg", quiet=True)
+nltk.download("punkt_tab", quiet=True)
+
 
 def test_generator():
     """Test Markov text generator."""
