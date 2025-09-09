@@ -12,11 +12,11 @@ def build_ngrams(corpus, n):
     """
     ngrams = defaultdict(lambda: defaultdict(Counter))
     
-    # Unigrams (n=1): treat as context = empty tuple
+    # Unigrams (n=1): unigram = counter(corpus)
     for word in corpus:
         ngrams[1][()][word] += 1
     
-    # Higher-order n-grams (n=2,3,...)
+    # Higher-order n-grams from 2 to n
     for i in range(2, n + 1):
         for j in range(len(corpus) - i + 1):
             context = tuple(corpus[j : j + i - 1])
@@ -27,7 +27,7 @@ def build_ngrams(corpus, n):
 
 def get_next_word_probabilities(ngrams, context, n):
     """
-    Calculates probabilities for the next word using stupid backoff.
+    Checking into probabilities for the next word using stupid backoff.
     """
     context_len = len(context)
     
@@ -43,7 +43,7 @@ def get_next_word_probabilities(ngrams, context, n):
         prob_dict = get_next_word_probabilities(ngrams, shorter_context, n)
         return {word: prob * ALPHA for word, prob in prob_dict.items()}
     
-    # Base case: unigram distribution
+    #  unigram distribution
     unigram_counts = ngrams[1][()]
     total_words = sum(unigram_counts.values())
     return {word: (count / total_words) * ALPHA for word, count in unigram_counts.items()}
@@ -63,7 +63,7 @@ def finish_sentence(sentence, n, corpus, randomize=False):
             break
             
         # Get the context for prediction
-        context_length = min(len(extended_sentence), n - 1)  # ✅ FIXED
+        context_length = min(len(extended_sentence), n - 1)  
         context = tuple(extended_sentence[-context_length:])
         
         # Get the probabilities for the next word
