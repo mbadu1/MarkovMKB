@@ -50,9 +50,8 @@ def get_next_word_probabilities(ngrams, context, n):
     
 def finish_sentence(sentence, n, corpus, randomize=False):
     """
-    Extends a sentence using a Markov text generator with stupid backoff.
-    Input: list of words
-    Output: list of words
+    Generates a sentence using a Markov-based text model with a simple backoff . 
+    This takes a list of words as input and returns an extended list of words as output.
     """
     extended_sentence = list(sentence)  # ensure it's a list
     ngrams = build_ngrams(corpus, n)
