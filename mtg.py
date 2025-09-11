@@ -60,17 +60,10 @@ def get_next_word_probabilities(ngrams, context, n):
 def finish_sentence(sentence, n, corpus, randomize=False):
     """
     Markov-based text model with backoff.
-
-    Args:
-        sentence (list[str]): seed words
-        n (int): order of n-gram model
-        corpus (list[str]): tokenized training text
-        randomize (bool): if True, sample randomly; if False, pick max prob
-
     Returns:
         list[str]: extended sentence (up to 10 words or until punctuation)
     """
-    extended_sentence = list(sentence)  # make sure it's a list
+    extended_sentence = list(sentence)  
     ngrams = build_ngrams(corpus, n)
 
     while len(extended_sentence) < 10:
@@ -78,7 +71,7 @@ def finish_sentence(sentence, n, corpus, randomize=False):
         if extended_sentence[-1] in [".", "?", "!"]:
             break
 
-        # Context = last n-1 words
+        # Context = last n-1 words (prediction)
         context_length = min(len(extended_sentence), n - 1)
         context = tuple(extended_sentence[-context_length:])
 
@@ -88,11 +81,11 @@ def finish_sentence(sentence, n, corpus, randomize=False):
             break
 
         if not randomize:
-            # Deterministic: pick most probable (alphabetical tiebreaker)
+            # alphabetical tiebreaker
             sorted_words = sorted(next_word_probs.keys())
             next_word = max(sorted_words, key=lambda word: next_word_probs[word])
         else:
-            # Random: sample by probability
+            
             words = list(next_word_probs.keys())
             weights = list(next_word_probs.values())
             next_word = random.choices(words, weights=weights, k=1)[0]
